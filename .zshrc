@@ -30,12 +30,7 @@ for file in "$ZSH_CONFIGS_DIR"/*(DN); do
     fi
 done
 
-# Now source oh-my-zsh.sh so that any plugins added in ~/.config/ezsh/zshrc/* files also get loaded
-source $ZSH/oh-my-zsh.sh
-
-# Configs that can only work after "source $ZSH/oh-my-zsh.sh", such as Aliases that depend oh-my-zsh plugins
-
-# Now source fzf.zsh , otherwise Ctr+r is overwritten by ohmyzsh
+# Now source fzf.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPS="--extended"
 

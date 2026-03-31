@@ -42,17 +42,14 @@ if [ -d ~/.quickzsh ]; then
     echo -e "\n PREVIOUS SETUP FOUND AT '~/.quickzsh'. PLEASE MANUALLY MOVE ANY FILES YOU'D LIKE TO '~/.config/ezsh' \n"
 fi
 
-echo -e "Installing oh-my-zsh\n"
-if [ -d ~/.config/ezsh/oh-my-zsh ]; then
-    echo -e "oh-my-zsh is already installed\n"
-    git -C ~/.config/ezsh/oh-my-zsh remote set-url origin https://github.com/ohmyzsh/ohmyzsh.git
-elif [ -d ~/.oh-my-zsh ]; then
-    echo -e "oh-my-zsh in already installed at '~/.oh-my-zsh'. Moving it to '~/.config/ezsh/oh-my-zsh'"
-    export ZSH="$HOME/.config/ezsh/oh-my-zsh"
-    mv ~/.oh-my-zsh ~/.config/ezsh/oh-my-zsh
-    git -C ~/.config/ezsh/oh-my-zsh remote set-url origin https://github.com/ohmyzsh/ohmyzsh.git
+echo -e "Installing zinit\n"
+ZINIT_HOME="${HOME}/.local/share/zinit/zinit.git"
+if [ -d "$ZINIT_HOME" ]; then
+    echo -e "zinit is already installed, updating...\n"
+    git -C "$ZINIT_HOME" pull
 else
-    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git ~/.config/ezsh/oh-my-zsh
+    mkdir -p "$(dirname "$ZINIT_HOME")"
+    git clone --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
 cp -f .zshrc ~/
@@ -66,31 +63,6 @@ if [ -f ~/.zcompdump ]; then
     mv ~/.zcompdump* ~/.cache/zsh/
 fi
 
-if [ -d ~/.config/ezsh/oh-my-zsh/plugins/zsh-autosuggestions ]; then
-    cd ~/.config/ezsh/oh-my-zsh/plugins/zsh-autosuggestions && git pull
-else
-    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ~/.config/ezsh/oh-my-zsh/plugins/zsh-autosuggestions
-fi
-
-if [ -d ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
-    cd ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting && git pull
-else
-    git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-fi
-
-if [ -d ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-completions ]; then
-    cd ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-completions && git pull
-else
-    git clone --depth=1 https://github.com/zsh-users/zsh-completions ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-completions
-fi
-
-if [ -d ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-history-substring-search ]; then
-    cd ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-history-substring-search && git pull
-else
-    git clone --depth=1 https://github.com/zsh-users/zsh-history-substring-search ~/.config/ezsh/oh-my-zsh/custom/plugins/zsh-history-substring-search
-fi
-
-
 # INSTALL FONTS
 
 echo -e "Installing Nerd Fonts version of Hack, Roboto Mono, DejaVu Sans Mono\n"
@@ -101,30 +73,12 @@ wget -q --show-progress -N https://github.com/ryanoasis/nerd-fonts/raw/master/pa
 
 fc-cache -fv ~/.fonts
 
-if [ -d ~/.config/ezsh/oh-my-zsh/custom/themes/powerlevel10k ]; then
-    cd ~/.config/ezsh/oh-my-zsh/custom/themes/powerlevel10k && git pull
-else
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/ezsh/oh-my-zsh/custom/themes/powerlevel10k
-fi
-
 if [ -d ~/.~/.config/ezsh/fzf ]; then
     cd ~/.config/ezsh/fzf && git pull
     ~/.config/ezsh/fzf/install --all --key-bindings --completion --no-update-rc
 else
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.config/ezsh/fzf
     ~/.config/ezsh/fzf/install --all --key-bindings --completion --no-update-rc
-fi
-
-if [ -d ~/.config/ezsh/oh-my-zsh/custom/plugins/k ]; then
-    cd ~/.config/ezsh/oh-my-zsh/custom/plugins/k && git pull
-else
-    git clone --depth 1 https://github.com/supercrabtree/k ~/.config/ezsh/oh-my-zsh/custom/plugins/k
-fi
-
-if [ -d ~/.config/ezsh/oh-my-zsh/custom/plugins/fzf-tab ]; then
-    cd ~/.config/ezsh/oh-my-zsh/custom/plugins/fzf-tab && git pull
-else
-    git clone --depth 1 https://github.com/Aloxaf/fzf-tab ~/.config/ezsh/oh-my-zsh/custom/plugins/fzf-tab
 fi
 
 if [ -d ~/.config/ezsh/marker ]; then
@@ -182,7 +136,7 @@ else
     # source ~/.zshrc
     echo -e "\nSudo access is needed to change default shell\n"
 
-    if chsh -s $(which zsh) && /bin/zsh -i -c 'omz update'; then
+    if chsh -s $(which zsh) && /bin/zsh -i -c 'zinit self-update && zinit update --all'; then
         echo -e "Installation complete, exit terminal and enter a new zsh session"
         echo -e "In a new zsh session manually run: build-fzf-tab-module"
     else
