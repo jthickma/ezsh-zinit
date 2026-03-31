@@ -1,6 +1,6 @@
 # ezsh
 A simple script to setup an awesome shell environment.
-Quickly install and setup zsh and oh-my-zsh (https://github.com/ohmyzsh/ohmyzsh/) with
+Quickly install and setup zsh and zinit (https://github.com/zdharma-continuum/zinit) with
 * powerlevel10k theme (https://github.com/romkatv/powerlevel10k)
 * Nerd-Fonts (https://github.com/ryanoasis/nerd-fonts)
 * zsh-completions (https://github.com/zsh-users/zsh-completions)
@@ -12,7 +12,7 @@ Quickly install and setup zsh and oh-my-zsh (https://github.com/ohmyzsh/ohmyzsh/
 * marker (https://github.com/pindexis/marker)
 * todotxt (https://github.com/todotxt/todo.txt-cli)
 
-Sets following useful aliases and ohmyzsh plugins. **You can add more or overwrite these in your personal zsh config files under `~/.config/ezsh/zshrc/`** 
+Sets following useful aliases and zinit plugins. **You can add more or overwrite these in your personal zsh config files under `~/.config/ezsh/zshrc/`** 
 * l="ls -lah"         - just type "l" instead of "ls -lah"
 * alias k="k -h"	  - show human readable filesizes, in kb, mb etc
 * e="exit"
@@ -25,7 +25,6 @@ Sets following useful aliases and ohmyzsh plugins. **You can add more or overwri
 * [x="extract"](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/extract)         - extract any compressed files
 * [z](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/z)   - quickly jump to most visited directories
 * [sudo](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/sudo)                - easily prefix your commands with sudo by pressing `esc` twice
-
 ## Demo
 
 Command prompt looks like this (easily customize it by placing your configs in ~/.config/ezsh/zshrc/)
@@ -60,9 +59,9 @@ You can also manually install Nerd Fonts of your choice.
 
 * marker's shortcut "Ctr+t" clashed with fzf so I rebound it to "Ctr +b"
 
-* All oh-my-zsh plugins are installed under ~/.config/ezsh/oh-my-zsh/plugin, Other tools (fzf,marker,todo) are installed in ~/.config/ezsh/
+* All zinit plugins are automatically downloaded and managed by zinit on first shell launch. Other tools (fzf, marker, todo) are installed in ~/.config/ezsh/
 
-* If you use Marker, disable zsh-autosuggestions as it has a conflict with Marker (completion looks ugly). Add `plugins=(${plugins:#(zsh-autosuggestions)})` into your personal config file to remove it
+* If you use Marker, disable zsh-autosuggestions as it has a conflict with Marker (completion looks ugly). Comment out or remove the `zinit light zsh-users/zsh-autosuggestions` line in your personal config file, or add `zinit delete zsh-users/zsh-autosuggestions` after it.
 
 * The look of the shell can be very easily customised[https://github.com/bhilburn/powerlevel9k#prompt-customization] by overwriting POWERLEVEL10K settings
 in your personal config file under ~/.config/ezsh/zshrc/ . See example setup under example/personal_rc.zsh
@@ -70,4 +69,4 @@ in your personal config file under ~/.config/ezsh/zshrc/ . See example setup und
 Suggestions about more cool tools are always welcome :)
 
 ### To Uninstall
-To uninstall simply delete ~/.zshrc and ~/.config/ezsh/. The script creates a backup of your original .zshrc in the home folder with the filename indicating it's a backup. Rename it back to .zshrc
+To uninstall simply delete ~/.zshrc, ~/.config/ezsh/, and ~/.local/share/zinit/. The script creates a backup of your original .zshrc in the home folder with the filename indicating it's a backup. Rename it back to .zshrc
